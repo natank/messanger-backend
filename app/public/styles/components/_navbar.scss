@@ -1,0 +1,82 @@
+.navbar {
+	font-family: nunito;
+	color: $secondary !important;
+
+	.active {
+		background-color: $success;
+		&:hover {
+			background-color: darken($success, 30%);
+		}
+		a,
+		a.text-secondary {
+			color: $light;
+		}
+	}
+	&.navbar-light .navbar-nav {
+		.nav-link {
+			color: $secondary;
+			&:hover {
+				color: darken($secondary, 20%);
+			}
+			&.active {
+				color: $light;
+			}
+		}
+	}
+	&--primary {
+		.nav-item:hover .nav-link {
+			background-color: transparent;
+		}
+	}
+}
+.navbar-brand {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	h2 {
+		padding: 0;
+		margin: 0;
+	}
+
+	&__main {
+		font-family: Hellofreeday !important; // override bootstrap
+		color: $secondary;
+	}
+	&__secondary {
+		font-family: ArbeiBerry;
+		color: $success;
+	}
+}
+
+.nav-item {
+	.nav-link {
+		position: relative;
+		text-transform: uppercase;
+		color: $success;
+
+		.dropdown-menu-h {
+			position: absolute;
+			left: 0;
+			top: 100%;
+			border-top: 3px solid transparent;
+			display: none;
+			min-width: 100%;
+			z-index: 20;
+			.dropdown-item {
+				color: $light;
+				background-color: $success;
+			}
+		}
+	}
+	&:hover {
+		cursor: pointer;
+		.nav-link {
+			box-sizing: border-box;
+			background-color: $success;
+			color: $light;
+		}
+		.dropdown-menu-h {
+			display: block;
+		}
+	}
+}

@@ -1,0 +1,47 @@
+@font-face {
+	font-family: Hellofreeday;
+	src: url('../../fonts/Hellofreeday.otf');
+}
+
+@font-face {
+	font-family: ArbeiBerry;
+	src: url('../../fonts/ArbeiBerry.otf');
+}
+
+@font-face {
+	font-family: chewy;
+	src: url('../../fonts/Chewy-Regular.ttf');
+}
+
+@font-face {
+	font-family: nunito;
+	src: url('../../fonts/NunitoSans-Regular.ttf');
+}
+
+h1 {
+	font-size: 1.5rem;
+	@include media-breakpoint-up(md) {
+		font-size: 2.5rem;
+	}
+}
+
+h2 {
+	font-size: 1.2rem;
+	@include media-breakpoint-up(md) {
+		font-size: 2rem;
+	}
+}
+
+body {
+	font-family: nunito;
+}
+
+html {
+	font-size: 16px;
+	writing-mode: horizontal-lr;
+	direction: ltr;
+}
+
+.navbar-brand {
+	font-family: 'McLaren', cursive;
+}

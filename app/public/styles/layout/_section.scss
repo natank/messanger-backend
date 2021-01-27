@@ -1,0 +1,15 @@
+section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  @include media-breakpoint-up(md){
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+  position: relative;
+  
+}                   
+.featuredProducts, .featuredCategories {
+  &__title{
+    margin-bottom: 2rem;
+  }
+}

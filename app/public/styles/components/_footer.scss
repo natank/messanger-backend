@@ -1,0 +1,69 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  background-color: $dark;
+  padding: 2rem;
+  color: #fff;
+  margin-top: 3rem;
+  @include media-breakpoint-up(md){
+    margin-top: 10rem;
+  }
+  .navbar-brand {
+    color: #fff;
+  }
+  &__logo{
+    display: block;
+    text-align: center;
+  }
+  &__main {
+    display: flex; 
+    flex-direction: column;
+    
+    justify-content: space-around;
+    margin: auto;
+    margin-top: 3rem;
+    width: 100%;
+    
+    @include media-breakpoint-up(md){
+      flex-direction: row;
+      width: 50%;
+      min-width: 600px;
+    }
+    @include media-breakpoint-up(lg){
+      width:70%;
+    }
+    @include media-breakpoint-up(xl){
+      width:30%;
+      min-width: 800px;
+    }
+
+    
+    
+  }
+  &__copyrights{
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    p {
+      margin-bottom: 0rem;
+    }
+    @include media-breakpoint-up(md){
+      margin-top: 3rem;
+    }
+  }
+  &__content {
+    text-align: center;
+    a {
+      color: #fff;
+    }
+  }
+  &__contact {
+    text-align: center;
+    @include media-breakpoint-up(md){
+      text-align: initial;
+    }
+    p {
+      margin-bottom: 0;
+    }
+    
+  }
+}
