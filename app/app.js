@@ -6,14 +6,11 @@ import connectMongoDBSession from 'connect-mongodb-session';
 import flash from 'connect-flash';
 
 import connectDB from './DB/Connection';
-import menuRoutes from './routes/menu';
 import authRouter from './routes/auth';
+import chatRouter from './routes/chat';
 import userRouter from './routes/user';
-import movieRouter from './routes/movies';
-import memberRouter from './routes/members';
-import subscriptionRouter from './routes/subscriptions';
 import setLocals from './BL/middleware/setLocals';
-
+import cors from 'cors';
 import * as authController from './BL/auth';
 
 connectDB();
@@ -48,7 +45,9 @@ if (!isProd) {
  *
  * */
 const app = express();
-/** CORS headers */
+
+app.use(cors());
+
 app.use((req, res, next) => {
 	console.log('request arrived');
 	next();
@@ -60,23 +59,6 @@ app.use((req, res, next) => {
 const dataMW = (function (app) {
 	app.use(express.json({ extended: false }));
 	app.use(express.urlencoded({ extended: true }));
-})(app);
-
-/**
- *
- * Session middleware
- *
- */
-
-const sessionMW = (function (app) {
-	app.use(
-		session({
-			secret: 'keyboard cat',
-			resave: false,
-			saveUninitialized: false,
-			store,
-		})
-	);
 })(app);
 
 /**
@@ -114,33 +96,21 @@ const generalMW = (function (app) {
 
 app.use(setLocals);
 
-app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader(
-		'Access-Control-Allow-Methods',
-		'OPTIONS, GET, POST, PUT, PATCH, DELETE'
-	);
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-	next();
-});
+/**Chat Routes */
+app.use('/chat', chatRouter);
 
-/**Menu Routes */
-app.get('/', menuRoutes);
-/**Movies Routes */
-
-app.use('/movies', movieRouter);
-/**Members Routes */
-app.use('/members', memberRouter);
-/**Subscriptions Routes */
-app.use('/subscriptions', subscriptionRouter);
 /**User Routes */
 app.use('/users', userRouter);
 
 /**Auth Routes */
 app.use('/auth', authRouter);
-app.get('/login', authController.getLogin);
-app.get('/logout', authController.getLogout);
-app.put('/signup');
+
+app.put(
+	'/signup',
+	authController.signupMiddleware,
+	authController.postCreateUser
+);
+
 app.use(function notFound(req, res) {
 	res.status(404).end();
 });

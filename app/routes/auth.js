@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post(
 	'/login',
-	[authController.validateUsername, authController.validatePassword],
+	[authController.validateLoginUsername, authController.validateLoginPassword],
 	authController.postLogin
 );
 

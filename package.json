@@ -60,6 +60,7 @@
 		"compression-webpack-plugin": "^3.1.0",
 		"connect-flash": "^0.1.1",
 		"connect-mongodb-session": "^2.2.0",
+		"cors": "^2.8.5",
 		"crypto": "^1.0.1",
 		"csurf": "^1.10.0",
 		"dotenv": "^8.2.0",
