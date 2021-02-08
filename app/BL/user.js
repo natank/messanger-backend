@@ -11,10 +11,10 @@ export async function findUser(id) {
 }
 
 export async function getUsers(req, res, next) {
+	console.log("get users")
 	try {
 		var users = await User.getUsers();
 		if (!users) users = [];
-		users.forEach(permissionsToString);
 	} catch (error) {
 		handleError(req, error);
 		return res.redirect('/');

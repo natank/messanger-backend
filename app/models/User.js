@@ -41,3 +41,12 @@ export async function createUser({ username, gender, password }) {
 		throw error;
 	}
 }
+
+export async function getUsers(){
+	try {
+		let users = await User.find()
+		return users
+	} catch (error) {
+		throw(error)
+	}
+}
