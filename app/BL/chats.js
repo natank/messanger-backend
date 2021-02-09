@@ -24,20 +24,20 @@ export async function getChat(req, res, next) {
 }
 
 export async function postCreateChat(req, res, next) {
-	const { name, genres, image, premiered } = req.body;
+	var { members, name } = req.body;
 
 	try {
-		var chat = await Chat.createChat({
+		var result = await Chat.createChat({
+			members,
 			name,
-			genres,
-			image,
-			premiered,
 		});
-		res.status(200).end();
 	} catch (err) {
-		console.log(err);
 		res.staus(500).end();
 	}
+
+	var { members, name, id } = result;
+	var chat = { members, name, id };
+	res.status(201).json(chat);
 }
 
 export async function updateChat(req, res, next) {

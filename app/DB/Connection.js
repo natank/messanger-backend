@@ -7,6 +7,7 @@ export default async function connectDB() {
 		await mongoose.connect(URI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
+			reconnectTries: 30,
 		});
 		console.log('db connected...!');
 	} catch (err) {

@@ -18,6 +18,10 @@ export const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	status: {
+		type: String,
+		required: true,
+	},
 });
 
 export const User = mongoose.model('user', userSchema);
@@ -32,8 +36,8 @@ export async function findByUsername(username) {
 	}
 }
 
-export async function createUser({ username, gender, password }) {
-	let user = new User({ username, gender, password });
+export async function createUser({ username, gender, password, status }) {
+	let user = new User({ username, gender, password, status });
 	try {
 		await user.save();
 	} catch (error) {
@@ -42,11 +46,12 @@ export async function createUser({ username, gender, password }) {
 	}
 }
 
-export async function getUsers(){
+export async function getUsers() {
 	try {
-		let users = await User.find()
-		return users
+		let users = await User.find({}, 'username gender status');
+
+		return users;
 	} catch (error) {
-		throw(error)
+		throw error;
 	}
 }

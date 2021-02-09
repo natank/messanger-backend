@@ -43,9 +43,14 @@ export async function postLogin(req, res, next) {
 export async function postCreateUser(req, res, next) {
 	const errors = validationResult(req);
 	if (errors.isEmpty()) {
-		var { username, password, gender } = req.body;
+		var { username, password, gender, status } = req.body;
 		let hashedPassword = await bcrypt.hash(password, 12);
-		await User.createUser({ username, gender, password: hashedPassword });
+		await User.createUser({
+			username,
+			gender,
+			password: hashedPassword,
+			status,
+		});
 		res.status(200).end();
 	} else {
 		res.json({ errors });

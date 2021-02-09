@@ -1,10 +1,17 @@
 import mongoose from 'mongoose';
-import { UserSchema } from './User';
 import { MessageSchema } from './Message';
+
+function today() {
+	let today = new Date(Date.now())
+		.toLocaleString('en-GB', { timeZone: 'UTC' })
+		.split(',')[0];
+	console.log(today);
+	return today;
+}
 
 const chatSchema = new mongoose.Schema({
 	members: {
-		type: [UserSchema],
+		type: [mongoose.ObjectId],
 		default: [],
 	},
 	name: {
@@ -12,13 +19,21 @@ const chatSchema = new mongoose.Schema({
 	},
 	dateUpdated: {
 		type: Date,
-		default: new Date(Date.now())
-			.toLocaleString('en-GB', { timeZone: 'UTC' })
-			.split(',')[0],
+		default: today(),
 	},
 	messages: {
 		type: [MessageSchema],
 	},
 });
 
-export default mongoose.model('chat', chatSchema);
+export const Chat = mongoose.model('chat', chatSchema);
+
+export async function createChat({ members, name }) {
+	var chat = new Chat({ members, name });
+	try {
+		chat = await chat.save();
+	} catch (error) {
+		throw error;
+	}
+	return { id: chat.id, members: chat.members, name: chat.name };
+}

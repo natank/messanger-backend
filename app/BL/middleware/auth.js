@@ -14,7 +14,7 @@ export function isAuth(req, res, next) {
 		var decodedToken = jwt.verify(token, 'parserdepracated');
 	} catch (error) {
 		error.statusCode = 500;
-		throw error;
+		next(error);
 	}
 	if (!decodedToken) {
 		const error = new Error('Not authenticated.');
