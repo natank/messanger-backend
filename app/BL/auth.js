@@ -14,18 +14,18 @@ export async function postLogin(req, res, next) {
 	// logInUser()
 
 	function signInUser() {
-		var loadedUser = req.user;
-		const userId = loadedUser.id.toString();
+		const { blockedUsers, gender, messages, status, username, id } = req.user;
+		const userId = id.toString();
 		var token = jwt.sign(
 			{
-				username: loadedUser.username,
+				username: username,
 				userId,
 			},
 			'parserdepracated',
 			{ expiresIn: '1h' }
 		);
-
-		res.status(200).json({ token, userId, user: { ...loadedUser } });
+		let user = { blockedUsers, gender, messages, status, username, id };
+		res.status(200).json({ token, user });
 	}
 
 	function cancelSignIn() {
