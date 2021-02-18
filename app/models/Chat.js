@@ -3,8 +3,6 @@ import { MessageSchema } from './Message';
 
 function today() {
 	let today = new Date(Date.now())
-		.toLocaleString('en-GB', { timeZone: 'UTC' })
-		.split(',')[0];
 	console.log(today);
 	return today;
 }
@@ -18,15 +16,16 @@ const chatSchema = new mongoose.Schema({
 		type: String,
 	},
 	dateUpdated: {
-		type: Date,
+		type: String,
 		default: today(),
 	},
 	messages: {
 		type: [MessageSchema],
+		default:[]
 	},
 });
 
-export const Chat = mongoose.model('chat', chatSchema);
+export const Chat = mongoose.model('Chat', chatSchema);
 
 export async function createChat({ members, name }) {
 	var chat = new Chat({ members, name });

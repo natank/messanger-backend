@@ -32,7 +32,7 @@ export async function postCreateChat(req, res, next) {
 			name,
 		});
 	} catch (err) {
-		res.staus(500).end();
+		res.status(500).end();
 	}
 
 	var { members, name, id } = result;
