@@ -1,12 +1,9 @@
 import express from 'express';
 import * as userController from '../BL/user';
-import {
-	checkAccountPassword,
-	checkAccountUsername,
-} from '../BL/middleware/user';
-
+import { isAuth } from '../BL/middleware/auth';
 const router = express.Router();
 
-router.get('/', userController.getUsers);
+router.get('/', isAuth, userController.getUsers);
+router.get('/conversations', isAuth, userController.getConversations);
 
 module.exports = router;

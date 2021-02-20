@@ -13,8 +13,8 @@ export function isAuth(req, res, next) {
 	try {
 		var decodedToken = jwt.verify(token, 'parserdepracated');
 	} catch (error) {
-		error.statusCode = 500;
-		next(error);
+		error.statusCode = 401;
+		throw error;
 	}
 	if (!decodedToken) {
 		const error = new Error('Not authenticated.');

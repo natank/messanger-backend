@@ -1,13 +1,10 @@
 import express from 'express';
 import path from 'path';
-import session from 'express-session';
-import connectMongoDBSession from 'connect-mongodb-session';
-
 import flash from 'connect-flash';
 
 import connectDB from './DB/Connection';
 import authRouter from './routes/auth';
-import chatRouter from './routes/chat';
+import conversationRouter from './routes/converation';
 import userRouter from './routes/user';
 import setLocals from './BL/middleware/setLocals';
 import cors from 'cors';
@@ -15,12 +12,6 @@ import * as authController from './BL/auth';
 
 connectDB();
 
-const MongoDBStore = connectMongoDBSession(session);
-
-const store = new MongoDBStore({
-	uri: process.env.DB_URI,
-	collection: 'sessions',
-});
 const isProd = process.env.NODE_ENV === 'production';
 let webpackDevMiddleware;
 let webpackHotMiddleware;
@@ -97,7 +88,7 @@ const generalMW = (function (app) {
 app.use(setLocals);
 
 /**Chat Routes */
-app.use('/chat', chatRouter);
+app.use('/conversations', conversationRouter);
 
 /**User Routes */
 app.use('/users', userRouter);

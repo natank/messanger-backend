@@ -1,9 +1,4 @@
 import * as User from '../models/User';
-import { params, validationResult } from 'express-validator';
-
-import bcrypt from 'bcryptjs';
-
-var customError = 'An error occured please try again later';
 
 export async function findUser(id) {
 	var user = await User.findById(id);
@@ -28,10 +23,21 @@ export async function getUsers(req, res, next) {
 }
 
 function handleError(req, res, next, error) {
-	error.statusCode = error.statusCode || 500;
 	next(error);
 }
 
 function generateError() {
 	throw new Error('Test error');
+}
+
+export async function getConversations(req, res, next) {
+	const { userId } = req.query;
+	try {
+		if (!userId) throw 'user is not defined';
+		var conversations = await User.getConversations(userId);
+	} catch (error) {
+		console.log(error);
+		res.status(500).end();
+	}
+	res.json(conversations);
 }

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { MessageSchema } from './Message';
+const Schema = mongoose.Schema;
+
 export const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
@@ -9,10 +10,12 @@ export const userSchema = new mongoose.Schema({
 		type: String,
 	},
 	blockedUsers: {
-		type: [mongoose.ObjectId],
+		type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+		default: [],
 	},
-	messages: {
-		type: [MessageSchema],
+	conversations: {
+		type: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
+		default: [],
 	},
 	gender: {
 		type: String,
@@ -48,10 +51,25 @@ export async function createUser({ username, gender, password, status }) {
 
 export async function getUsers() {
 	try {
-		let users = await User.find({}, 'username gender status');
+		let users = await User.find(
+			{},
+			'username gender status conversations'
+		).populate();
 
 		return users;
 	} catch (error) {
 		throw error;
 	}
+}
+
+export async function getConversations(userId) {
+	try {
+		var data = await User.findById(userId, 'conversations -_id').populate(
+			'conversations'
+		);
+		var conversations = JSON.parse(JSON.stringify(data));
+	} catch (error) {
+		throw error;
+	}
+	return conversations;
 }
