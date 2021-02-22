@@ -31,10 +31,10 @@ function generateError() {
 }
 
 export async function getConversations(req, res, next) {
-	const { userId } = req.query;
+	const { userId, filter } = req.query;
 	try {
 		if (!userId) throw 'user is not defined';
-		var conversations = await User.getConversations(userId);
+		var conversations = await User.getConversations(userId, filter);
 	} catch (error) {
 		console.log(error);
 		res.status(500).end();

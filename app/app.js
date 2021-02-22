@@ -4,7 +4,7 @@ import flash from 'connect-flash';
 
 import connectDB from './DB/Connection';
 import authRouter from './routes/auth';
-import conversationRouter from './routes/converation';
+import conversationRouter from './routes/conversation';
 import userRouter from './routes/user';
 import setLocals from './BL/middleware/setLocals';
 import cors from 'cors';

@@ -5,5 +5,4 @@ const router = express.Router();
 
 router.get('/', isAuth, userController.getUsers);
 router.get('/conversations', isAuth, userController.getConversations);
-
 module.exports = router;
