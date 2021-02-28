@@ -62,14 +62,37 @@ export async function getUsers() {
 	}
 }
 
-export async function getConversations(userId) {
+/**
+ *
+ * findByFirstName
+ * used to find user with name that starts with a specified value
+ * Argi,emts :
+ *    filter  - specifies the value
+ *    userId - is the id of the current user who issued the request from
+ * the front end
+ *
+ */
+export async function findByFirstName({ userId, filter }) {
+	const regexp = new RegExp(`^${filter}`, 'i');
+	const users = await User.find({ username: regexp });
+	const filteredUsers = users.filter(user => user.id != userId);
+	return filteredUsers;
+}
+
+export async function getConversations({ userId, filter }) {
 	try {
-		var data = await User.findById(userId, 'conversations -_id').populate(
-			'conversations'
-		);
-		var conversations = JSON.parse(JSON.stringify(data));
+		var data = await User.findOne(
+			{ _id: userId },
+			'conversations -_id'
+		).populate('conversations');
+		var user = JSON.parse(JSON.stringify(data));
 	} catch (error) {
 		throw error;
 	}
+	var conversations = filter
+		? user.conversations.filter(conversation => {
+				return conversation.name.toLowerCase().startsWith(filter.toLowerCase());
+		  })
+		: user.conversations;
 	return conversations;
 }

@@ -1,7 +1,7 @@
 import * as Conversation from '../models/Conversation';
 
 export async function findConversations(req, res, next) {
-	var { userId } = req.query;
+	var { userId, filter } = req.query;
 	try {
 		var conversations = await Conversation.findConversations({ userId });
 		res.status(200).json({ conversations });

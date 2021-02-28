@@ -34,10 +34,17 @@ export async function getConversations(req, res, next) {
 	const { userId, filter } = req.query;
 	try {
 		if (!userId) throw 'user is not defined';
-		var conversations = await User.getConversations(userId, filter);
+		const conversations = await User.getConversations({ userId, filter });
+		const users = await User.findByFirstName({ userId, filter });
+		const privateConversations = users.map(user => {
+			return { withUser: user };
+		});
+		console.log(
+			`private conversations : ${JSON.stringify(privateConversations)}`
+		);
+		res.json([...conversations, ...privateConversations]);
 	} catch (error) {
 		console.log(error);
 		res.status(500).end();
 	}
-	res.json(conversations);
 }
