@@ -27,7 +27,7 @@ export const userSchema = new mongoose.Schema({
 	},
 });
 
-export const User = mongoose.model('user', userSchema);
+export const User = mongoose.model('User', userSchema);
 
 export async function findByUsername(username) {
 	try {
@@ -84,7 +84,10 @@ export async function getConversations({ userId, filter }) {
 		var data = await User.findOne(
 			{ _id: userId },
 			'conversations -_id'
-		).populate('conversations');
+		).populate({
+			path: 'conversations',
+			populate: { path: 'members' },
+		});
 		var user = JSON.parse(JSON.stringify(data));
 	} catch (error) {
 		throw error;

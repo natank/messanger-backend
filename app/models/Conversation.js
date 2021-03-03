@@ -1,15 +1,16 @@
 import mongoose from 'mongoose';
 import { MessageSchema } from './Message';
 import { User } from './User';
+const Schema = mongoose.Schema;
 
 function today() {
 	let today = new Date(Date.now());
 	return today;
 }
 
-const conversationSchema = new mongoose.Schema({
+const conversationSchema = new Schema({
 	members: {
-		type: [mongoose.ObjectId],
+		type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 		default: [],
 	},
 	name: {
