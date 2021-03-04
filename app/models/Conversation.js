@@ -69,3 +69,13 @@ export async function createConversation({ members, name }) {
  * get all the conversations that user participated in.
  */
 export async function getConversations(userId) {}
+
+export async function getConversation({conversationId}) {
+	try {
+		let conversation = await Conversation.findById(conversationId)
+		console.log(conversation)
+		return conversation
+	} catch (error) {
+		throw error
+	}
+}

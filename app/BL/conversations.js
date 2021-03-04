@@ -16,7 +16,7 @@ export async function getConversation(req, res, next) {
 	try {
 		const conversationId = req.params.id;
 		var conversation = conversationId
-			? await Conversation.findById(conversationId)
+			? await Conversation.getConversation({conversationId})
 			: undefined;
 		res.status(200).json({ conversation });
 	} catch (err) {
