@@ -6,8 +6,7 @@ import { isAuth } from '../BL/middleware/auth';
 const router = express.Router();
 
 router.get('/list', isAuth, conversationsController.findConversations);
-router.get('/:id', isAuth, conversationsController.getConversation);
 
 router.post('/', isAuth, conversationsController.postCreateConversation);
-
+router.post('/:id/createMessage', conversationsController.postCreateMessage);
 export default router;

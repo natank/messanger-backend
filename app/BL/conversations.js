@@ -16,7 +16,7 @@ export async function getConversation(req, res, next) {
 	try {
 		const conversationId = req.params.id;
 		var conversation = conversationId
-			? await Conversation.getConversation({conversationId})
+			? await Conversation.getConversation({ conversationId })
 			: undefined;
 		res.status(200).json({ conversation });
 	} catch (err) {
@@ -25,7 +25,7 @@ export async function getConversation(req, res, next) {
 	}
 }
 
-export async function postCreateConversation(req, res, next) {
+export async function postCreateConversation(req, res) {
 	var { members, name } = req.body;
 
 	try {
@@ -41,4 +41,20 @@ export async function postCreateConversation(req, res, next) {
 	var { members, name, id } = result;
 	var conversation = { members, name, id };
 	res.status(201).json(conversation);
+}
+
+export async function postCreateMessage(req, res) {
+	const conversationId = req.params.id;
+	const { text, authorId } = req.body;
+	try {
+		await Conversation.createMessage({
+			conversationId,
+			authorId,
+			message: text,
+		});
+		res.status(200).end();
+	} catch (err) {
+		console.log(err);
+		res.status(500).end();
+	}
 }

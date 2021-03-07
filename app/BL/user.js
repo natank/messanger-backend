@@ -48,3 +48,14 @@ export async function getConversations(req, res, next) {
 		res.status(500).end();
 	}
 }
+
+export async function getConversation(req, res) {
+	const { userId } = req.query;
+	const { conversationId } = req.params;
+	try {
+		const conversation = await User.getConversation({ userId, conversationId });
+		res.status(200).json(conversation);
+	} catch (error) {
+		res.status(500).end();
+	}
+}

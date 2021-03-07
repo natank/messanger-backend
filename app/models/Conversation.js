@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { MessageSchema } from './Message';
 import { User } from './User';
 const Schema = mongoose.Schema;
 
@@ -21,7 +20,16 @@ const conversationSchema = new Schema({
 		default: today(),
 	},
 	messages: {
-		type: [MessageSchema],
+		type: [
+			{
+				writtenBy: {
+					type: Schema.Types.ObjectId,
+					ref: 'User',
+				},
+				text: String,
+				dateCreated: Schema.Types.Date,
+			},
+		],
 		default: [],
 	},
 });
@@ -65,17 +73,29 @@ export async function createConversation({ members, name }) {
 	};
 }
 
-/**getConversations
- * get all the conversations that user participated in.
- */
-export async function getConversations(userId) {}
-
-export async function getConversation({conversationId}) {
+export async function getConversation({ conversationId }) {
 	try {
-		let conversation = await Conversation.findById(conversationId)
-		console.log(conversation)
-		return conversation
+		let conversation = await Conversation.findById(conversationId).populate({
+			path: 'messages.writtenBy',
+			select: { _id: 1, username: 1 },
+		});
+		return conversation;
 	} catch (error) {
-		throw error
+		throw error;
+	}
+}
+
+export async function createMessage({ conversationId, authorId, message }) {
+	try {
+		const conversation = await Conversation.findById(conversationId);
+		const messageObj = {
+			writtenBy: authorId,
+			text: message,
+			dateCreated: Date.now(),
+		};
+		conversation.messages = [...conversation.messages, messageObj];
+		await conversation.save();
+	} catch (error) {
+		throw error;
 	}
 }

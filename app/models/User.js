@@ -88,6 +88,7 @@ export async function getConversations({ userId, filter }) {
 			path: 'conversations',
 			populate: { path: 'members' },
 		});
+
 		var user = JSON.parse(JSON.stringify(data));
 	} catch (error) {
 		throw error;
@@ -98,4 +99,14 @@ export async function getConversations({ userId, filter }) {
 		  })
 		: user.conversations;
 	return conversations;
+}
+
+export async function getConversation({ userId, conversationId }) {
+	const user = await User.findOne({ _id: userId }, 'conversations').populate({
+		path: 'conversations',
+		match: { _id: { $eq: conversationId } },
+	});
+	let conversation = user.conversations[0];
+	console.log(conversation);
+	return conversation;
 }

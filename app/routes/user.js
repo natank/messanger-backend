@@ -5,4 +5,9 @@ const router = express.Router();
 
 router.get('/', isAuth, userController.getUsers);
 router.get('/conversations', isAuth, userController.getConversations);
+router.get(
+	'/conversations/:conversationId',
+	isAuth,
+	userController.getConversation
+);
 module.exports = router;
