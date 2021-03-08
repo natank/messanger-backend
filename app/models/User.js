@@ -108,7 +108,7 @@ export async function getConversation({ userId, conversationId }) {
 	});
 	let conversation = await user.conversations[0]
 		.populate({ path: 'messages.writtenBy' })
+		.populate({path: 'members'})
 		.execPopulate();
-	console.log(conversation);
 	return conversation;
 }
