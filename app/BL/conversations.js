@@ -45,7 +45,7 @@ export async function postCreateConversation(req, res) {
 
 export async function postCreateMessage(req, res) {
 	const conversationId = req.params.id;
-	const { text, authorId } = req.body;
+	const { text, authorId, withUserId } = req.body;
 	try {
 		await Conversation.createMessage({
 			conversationId,
