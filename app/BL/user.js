@@ -34,15 +34,50 @@ export async function getConversations(req, res, next) {
 	const { userId, filter } = req.query;
 	try {
 		if (!userId) throw 'user is not defined';
+		// Find the conversations that match the filters
 		const conversations = await User.getConversations({ userId, filter });
-		const users = await User.findByFirstName({ userId, filter });
-		const privateConversations = users.map(user => {
-			return { withUser: user };
-		});
-		console.log(
-			`private conversations : ${JSON.stringify(privateConversations)}`
+		// find the users with private conversations
+		const existingPrivateConversations = conversations.filter(
+			conversation => !conversation.name
 		);
-		res.json([...conversations, ...privateConversations]);
+
+		// Find all the users that match the filter
+		const users = await User.findByFirstName({ userId, filter });
+
+		// Find the users that match the filter but don't have private conversations already
+		const usersWithNoConversation = users.reduce(
+			function findUsersWithNoConversation(acc, user) {
+				const userHasPrivateConversation = existingPrivateConversations.some(
+					// check if the user is member in one of the private conversations
+					function checkIfConversationIncludesUser(privateConversation) {
+						// check if the user if member of the current private conversation
+						const privateConversationContainsUser = privateConversation.members.some(
+							function compareMemberToUser(member) {
+								const match = member._id == user.id;
+								return match;
+							}
+						);
+						return privateConversationContainsUser;
+					}
+				);
+				{
+					// filter userif already included in private conversation
+					if (userHasPrivateConversation) return [...acc];
+					else return [...acc, user];
+				}
+			},
+			[]
+		);
+		const potentialPrivateConversations = usersWithNoConversation.map(user => {
+			return {
+				members: [
+					{ username: user.username, gender: user.gender, _id: user.id },
+					userId,
+				],
+				messages: [],
+			};
+		});
+		res.json([...conversations, ...potentialPrivateConversations]);
 	} catch (error) {
 		console.log(error);
 		res.status(500).end();

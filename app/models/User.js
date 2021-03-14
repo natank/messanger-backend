@@ -95,7 +95,18 @@ export async function getConversations({ userId, filter }) {
 	}
 	var conversations = filter
 		? user.conversations.filter(conversation => {
-				return conversation.name.toLowerCase().startsWith(filter.toLowerCase());
+				if (conversation.name) {
+					return conversation.name
+						.toLowerCase()
+						.startsWith(filter.toLowerCase());
+				} else {
+					const withUser = conversation.members.find(
+						member => member._id != userId
+					);
+					return withUser.username
+						.toLowerCase()
+						.startsWith(filter.toLowerCase());
+				}
 		  })
 		: user.conversations;
 	return conversations;
@@ -108,7 +119,7 @@ export async function getConversation({ userId, conversationId }) {
 	});
 	let conversation = await user.conversations[0]
 		.populate({ path: 'messages.writtenBy' })
-		.populate({path: 'members'})
+		.populate({ path: 'members' })
 		.execPopulate();
 	return conversation;
 }

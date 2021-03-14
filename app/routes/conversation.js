@@ -8,5 +8,5 @@ const router = express.Router();
 router.get('/list', isAuth, conversationsController.findConversations);
 
 router.post('/', isAuth, conversationsController.postCreateConversation);
-router.post('/:id/createMessage', conversationsController.postCreateMessage);
+router.post('/createMessage', conversationsController.postCreateMessage);
 export default router;
