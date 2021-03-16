@@ -27,6 +27,7 @@ export async function getConversation(req, res, next) {
 
 export async function postCreateConversation(req, res) {
 	var { members, name } = req.body;
+	console.log(members);
 
 	try {
 		var result = await Conversation.createConversation({
@@ -38,8 +39,8 @@ export async function postCreateConversation(req, res) {
 		res.status(500).end();
 	}
 
-	var { members, name, id } = result;
-	var conversation = { members, name, id };
+	var { members, name, _id } = result;
+	var conversation = { members, name, _id };
 	res.status(201).json(conversation);
 }
 

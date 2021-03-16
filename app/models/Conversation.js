@@ -65,9 +65,19 @@ export async function createConversation({ members, name }) {
 	} catch (error) {
 		throw error;
 	}
+	try {
+		await conversation
+			.populate({
+				path: 'members',
+				select: { gender: 1, status: 1, username: 1 },
+			})
+			.execPopulate();
+	} catch (error) {
+		throw error;
+	}
 
 	return {
-		id: conversation.id,
+		_id: conversation._id,
 		members: conversation.members,
 		name: conversation.name,
 	};
@@ -85,45 +95,17 @@ export async function getConversation({ conversationId }) {
 	}
 }
 
-export async function createMessage({
-	conversationId,
-	authorId,
-	withUserId,
-	message,
-}) {
-	async function addMessageToConversation({
-		conversationId,
-		message,
-		authorId,
-	}) {
-		try {
-			const conversation = await Conversation.findById(conversationId);
-			const messageObj = {
-				writtenBy: authorId,
-				text: message,
-				dateCreated: Date.now(),
-			};
-			conversation.messages = [...conversation.messages, messageObj];
-			await conversation.save();
-		} catch (error) {
-			throw error;
-		}
+export async function createMessage({ conversationId, authorId, message }) {
+	try {
+		let conversation = await Conversation.findById(conversationId).exec();
+		const messageObj = {
+			writtenBy: authorId,
+			text: message,
+			dateCreated: Date.now(),
+		};
+		conversation.messages = [...conversation.messages, messageObj];
+		await conversation.save();
+	} catch (error) {
+		throw error;
 	}
-	if (conversationId) {
-		await addMessageToConversation({ conversationId, message, authorId });
-	} else if (withUserId) {
-		// create new conversation
-		try {
-			const conversation = await createConversation({
-				members: [authorId, withUserId],
-			});
-			await addMessageToConversation({
-				conversationId: conversation.id,
-				message,
-				authorId,
-			});
-		} catch (error) {
-			throw error;
-		}
-	} else throw 'illegal message request';
 }
