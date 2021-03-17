@@ -51,7 +51,7 @@ export async function postCreateMessage(req, res) {
 			conversationId,
 			authorId,
 			withUserId,
-			message: text,
+			text,
 		});
 		res.status(200).end();
 	} catch (err) {

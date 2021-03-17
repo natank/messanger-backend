@@ -22,7 +22,7 @@ const conversationSchema = new Schema({
 	messages: {
 		type: [
 			{
-				writtenBy: {
+				author: {
 					type: Schema.Types.ObjectId,
 					ref: 'User',
 				},
@@ -86,7 +86,7 @@ export async function createConversation({ members, name }) {
 export async function getConversation({ conversationId }) {
 	try {
 		let conversation = await Conversation.findById(conversationId).populate({
-			path: 'messages.writtenBy',
+			path: 'messages.author',
 			select: { _id: 1, username: 1 },
 		});
 		return conversation;
@@ -95,12 +95,12 @@ export async function getConversation({ conversationId }) {
 	}
 }
 
-export async function createMessage({ conversationId, authorId, message }) {
+export async function createMessage({ conversationId, authorId, text }) {
 	try {
 		let conversation = await Conversation.findById(conversationId).exec();
 		const messageObj = {
-			writtenBy: authorId,
-			text: message,
+			author: authorId,
+			text,
 			dateCreated: Date.now(),
 		};
 		conversation.messages = [...conversation.messages, messageObj];
