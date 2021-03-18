@@ -118,7 +118,7 @@ export async function getConversation({ userId, conversationId }) {
 		match: { _id: { $eq: conversationId } },
 	});
 	let conversation = await user.conversations[0]
-		.populate({ path: 'messages.writtenBy' })
+		.populate({ path: 'messages.author' })
 		.populate({ path: 'members' })
 		.execPopulate();
 	return conversation;
