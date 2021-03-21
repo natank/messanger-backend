@@ -9,6 +9,7 @@ import userRouter from './routes/user';
 import setLocals from './BL/middleware/setLocals';
 import cors from 'cors';
 import * as authController from './BL/auth';
+import socketio from './socket';
 
 connectDB();
 
@@ -116,7 +117,16 @@ app.use(function errorHandler(error, req, res, next) {
 
 const connect = (async function (app) {
 	const PORT = process.env.PORT || 8080;
-	app.listen(PORT, () => {
+	const server = app.listen(PORT, () => {
 		console.log(`app is listening on port http://localhost:${PORT}`);
 	});
+	// establish web socket connection
+	try {
+		const io = socketio.init(server);
+		io.on('connection', socket => {
+			console.log('Client connected');
+		});
+	} catch (error) {
+		console.log(error);
+	}
 })(app);

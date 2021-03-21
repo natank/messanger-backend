@@ -1,4 +1,5 @@
 import * as Conversation from '../models/Conversation';
+import io from '../socket';
 
 export async function findConversations(req, res, next) {
 	var { userId, filter } = req.query;
@@ -45,13 +46,17 @@ export async function postCreateConversation(req, res) {
 }
 
 export async function postCreateMessage(req, res) {
-	const { text, authorId, withUserId, conversationId } = req.body;
+	const { text, author, conversationId } = req.body;
+	const theMessage = { text, author, conversationId };
 	try {
 		await Conversation.createMessage({
-			conversationId,
-			authorId,
-			withUserId,
-			text,
+			text: theMessage.text,
+			authorId: theMessage.author.id,
+			conversationId: theMessage.conversationId,
+		});
+		io.getIO().emit('message', {
+			action: 'create',
+			message: theMessage,
 		});
 		res.status(200).end();
 	} catch (err) {
